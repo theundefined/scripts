@@ -1,0 +1,8 @@
+wget -q http://www.twojeip.wp.pl -O - | \
+	egrep "ipadress =|ipfrom =" |awk '{printf "%s",$4}'
+echo
+
+
+#	grep -A 2 bx_yip |
+#	grep -v class |
+#	cut -f 2 -d ">" |cut -f 1 -d "<" |xargs echo
