@@ -1,0 +1,17 @@
+#!/bin/sh
+tmpdir=`mktemp -d /tmp/bgplay.XXXXXX`
+cd $tmpdir
+#wget http://www.ris.ripe.net/bgplay/bgplay-client.jar
+#wget http://www.ris.ripe.net/bgplay/bgplay.cfg
+wget -4 http://bgplay.routeviews.org/bgplay/bgplay-client.jar
+wget -4 http://bgplay.routeviews.org/bgplay/bgplay.cfg
+
+#cat >>bgplay.cfg <<EOF
+#server = www.ris.ripe.net
+#port = 21173
+#EOF
+
+[ "$1" ] && sed -e "s@193.204.0.0/15@$1@g" -i bgplay.cfg
+
+java -jar bgplay-client.jar
+rm -fr $tmpdir
