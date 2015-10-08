@@ -1,0 +1,42 @@
+#!/bin/sh
+xrandr --auto
+xrandr --output DP1 --auto
+xrandr --output DP2 --auto
+xrandr --output DP3 --auto
+xrandr --output LVDS1 --auto
+xrandr --auto --output VGA1 --right-of LVDS1
+xrandr --auto --output DP1 --right-of LVDS1
+xrandr --auto --output DP2 --right-of LVDS1
+xrandr --auto --output DP3 --left-of LVDS1
+xrandr --auto --output HDMI1 --right-of LVDS1
+if [ "$1" = "same" ]; then
+	max=`xrandr  |awk '{print $1 }' |sort |uniq -c |grep "  2" |awk '{print $2}' |sort -n |tail -1`
+	maxxx=1440x900
+	xrandr  --output DP1 --mode $max
+	xrandr  --output HDMI1 --mode $max
+	xrandr  --output LVDS1 --mode $max
+	xrandr --auto --output DP1 --same-as LVDS1
+	xrandr --auto --output HDMI1 --same-as LVDS1
+fi
+xfconf-query -c xfce4-panel -p /panels/panel-0/output-name -s auto
+xfconf-query -c xfce4-panel -p /panels/panel-0/output-name -s LVDS1
+#xrandr --auto --output DP1 --right-of LVDS1 --rotate right
+
+# 3 monitors
+if [ "`xrandr -q |grep " connected" |wc -l`" -eq 3 ] ;then
+xdotool search --class pidgin |while read id; do
+	wmctrl -ir $id -b remove,maximized_vert,maximized_horz
+	xdotool windowmove $id 0 25
+	wmctrl -ir $id -b add,maximized_vert,maximized_horz
+done
+xdotool search --name Terminal |while read id; do
+	wmctrl -ir $id -b remove,maximized_vert,maximized_horz
+	xdotool windowmove $id 1599 25
+	wmctrl -ir $id -b add,maximized_vert,maximized_horz
+done
+xdotool search --name chromium |while read id; do
+	wmctrl -ir $id -b remove,maximized_vert,maximized_horz
+	xdotool windowmove $id 3200 25
+	wmctrl -ir $id -b add,maximized_vert,maximized_horz
+done
+fi
