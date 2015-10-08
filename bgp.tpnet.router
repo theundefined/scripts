@@ -1,0 +1,19 @@
+#!/bin/sh
+progname=`basename $0`
+targets="{ping,traceroute,bgp,bgpre}.tpnet.router"
+
+if [ "$progname" = "lib.tpnet" -a "$1" = "targets" ]; then
+	echo $targets
+	exit
+fi
+
+address=$1
+service=`echo $progname |cut -f 1 -d .`
+
+[ "$service" = "traceroute" ] && service=trace
+[ "$service" = "bgpre" ] && service="sh ip bgp regexp"
+
+wget -q --post-data "query=$service&router=lodz_lg&addr=$1" http://lg.tpnet.pl/cgi-bin/lg.pl -O - \
+	| sed -e's/<[^>]*>//g'
+
+
