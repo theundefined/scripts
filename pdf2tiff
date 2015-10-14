@@ -1,0 +1,15 @@
+#!/bin/bash
+set -x
+export HOME=/tmp
+tmpname=`mktemp /tmp/pdf2tiff.XXXXXX`
+set -x
+acroread -toPostScript < $1  > $tmpname.ps
+ls -l $tmpname.ps
+
+gs -dNOPAUSE -dNOPAGEPROMPT -dBATCH -sPAPERSIZE=a4 -sDEVICE=tifflzw -r300x300 -sOutputFile=$tmpname.tiff $tmpname.ps 2>/dev/null
+
+
+#rm -f $tmpname.ps $tmpname.tiff
+ls -l $1 $tmpname.ps $tmpname.tiff
+#cat $tmpname.tiff
+

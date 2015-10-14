@@ -3,6 +3,7 @@ xrandr --auto
 xrandr --output DP1 --auto
 xrandr --output DP2 --auto
 xrandr --output DP3 --auto
+xrandr --output VGA1 --auto
 xrandr --output LVDS1 --auto
 xrandr --auto --output VGA1 --right-of LVDS1
 xrandr --auto --output DP1 --right-of LVDS1
@@ -17,6 +18,9 @@ if [ "$1" = "same" ]; then
 	xrandr  --output LVDS1 --mode $max
 	xrandr --auto --output DP1 --same-as LVDS1
 	xrandr --auto --output HDMI1 --same-as LVDS1
+elif [ "$1" = "off" ]; then
+	xrandr --output DP1 --off
+	xrandr --output VGA1 --off
 fi
 xfconf-query -c xfce4-panel -p /panels/panel-0/output-name -s auto
 xfconf-query -c xfce4-panel -p /panels/panel-0/output-name -s LVDS1

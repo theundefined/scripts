@@ -1,0 +1,59 @@
+#!/usr/bin/perl
+# www.attackvector.org
+# 
+use LWP::UserAgent;
+use XML::LibXML;
+ 
+$url = "https://api.skyhookwireless.com/wps2/location";
+$ua = LWP::UserAgent->new;
+$handler = XML::LibXML->new();
+ 
+$bssid= $ARGV[0];
+$bssid =~ s/\://g;
+ 
+if($bssid eq "") {
+ print "Usage: $0 <bssid>\n";
+ print "Example: $0 AA:BB:CC:DD:EE:FF\n";
+ exit(0);
+}
+ 
+sub response {
+    my ($response) = @_;
+    $xml = $response->content;
+    $xml =~ s/\n//g;
+    $page = $handler->parse_string($xml);
+    if((@{$page->getElementsByTagName('longitude')}[0]) ne "") {
+        $lat = $page->getElementsByTagName('latitude');  
+        $long = $page->getElementsByTagName('longitude');
+        $streetnum = $page->getElementsByTagName('street-number');
+        $streetname = $page->getElementsByTagName('address-line');
+        $city = $page->getElementsByTagName('city');
+        $zip = $page->getElementsByTagName('postal-code');
+        $co = $page->getElementsByTagName('county');  
+        $state = $page->getElementsByTagName('state');
+        print "$streetnum $streetname\n";
+        print "$co county\n";
+        print "$city, $state $zip\n";
+        print "Latitude: $lat\n";  
+        print "Longitude: $long\n";
+        print "http://maps.google.com/maps?f=q&source=s_q&hl=en&geocode=&q=" . $lat . "+" . $long . "&sll=37.0625,95.677068&sspn=57.815136,114.169922&ie=UTF8&t=h&z=17\n";
+    } else {
+        print "No results for $bssid\n";
+    }
+}
+ 
+$request = "<?xml version='1.0'?>  
+<LocationRQ xmlns='http://skyhookwireless.com/wps/2005' version='2.6' street-address-lookup='full'>  
+  <authentication version='2.0'>  
+    <simple>  
+      <username>beta</username>  
+      <realm>js.loki.com</realm>  
+    </simple>  
+  </authentication>  
+  <access-point>  
+    <mac>$bssid</mac>  
+    <signal-strength>-50</signal-strength>  
+  </access-point>  
+</LocationRQ>";
+$response = $ua->post( $url, 'Content-Type' => 'text/xml', Content => $request );
+response($response);

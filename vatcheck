@@ -1,0 +1,7 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+	echo podaj nip
+	exit 0
+fi
+wget -q --post-data="ms=PL&vat=$1" http://ec.europa.eu/taxation_customs/vies/viesquer.do -O - | \
+	vilistextum  - - |grep -v ^$  |grep -A 100 "VIES VAT number validation"
