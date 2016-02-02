@@ -16,8 +16,10 @@ if [ "$1" = "same" ]; then
 	xrandr  --output DP1 --mode $max
 	xrandr  --output HDMI1 --mode $max
 	xrandr  --output LVDS1 --mode $max
+	xrandr  --output VGA1 --mode $max
 	xrandr --auto --output DP1 --same-as LVDS1
 	xrandr --auto --output HDMI1 --same-as LVDS1
+	xrandr --auto --output VGA1 --same-as LVDS1
 elif [ "$1" = "off" ]; then
 	xrandr --output DP1 --off
 	xrandr --output VGA1 --off

@@ -1,0 +1,30 @@
+#!/bin/bash
+if [ -z "$2" ]; then
+        echo invoke:
+        echo "$0 name programs [options]"
+fi
+
+user=`id -nu`
+name=$1
+shift
+dir=/var/lib/check_mk_agent/joblock/$user/
+if [ ! -d $dir ]; then
+        mkdir -p $dir
+        if [ $? -ne 0 ]; then
+                echo "WARNING: can't create directory $dir"
+                exit 1 
+        fi
+fi
+
+lockfile=$dir/$name.lock
+
+exec 200>$lockfile
+if flock -n 200; then
+        pid=$$
+        echo $pid 1>&200
+        mk-job $name $@
+        rm $lockfile
+else
+        echo WARNING: $name already running
+        exit 1
+fi
