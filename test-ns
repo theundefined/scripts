@@ -1,0 +1,27 @@
+#!/bin/sh
+network=192.168.13
+
+for id in `seq 0 126`; do
+	ip netns del test-$id;
+done;
+
+bring(){
+ set -x
+ idprev=$1
+ id=$2
+ ipprev=$(( $idprev * 2 ))
+ ip=$(( $idprev * 2 +1 ))
+ ip netns add test-$id
+ ip netns exec test-$id ip link set dev lo up 
+ ip link add test-$1-$2 type veth peer name test-$2-$1
+ [ $idprev -gt 0 ] && ip link set test-$1-$2 netns test-$idprev up
+ [ $idprev -gt 0 ] && ip netns exec test-$idprev ip a a ${network}.$ipprev/31 dev test-$1-$2
+ [ $idprev -gt 0 ] && ip netns exec test-$idprev ip r a ${network}.0/24 via $network.$ip
+ ip link set test-$2-$1 netns test-$id up
+ ip netns exec test-$id ip a a ${network}.$ip/31 dev test-$2-$1
+ ip netns exec test-$id ip r a default via ${network}.$ipprev
+}
+
+for id in `seq 0 126`; do
+	bring $id $(( $id + 1 ))
+done;
