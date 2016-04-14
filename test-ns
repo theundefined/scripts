@@ -3,6 +3,7 @@
 #ip netns exec test-1 bash
 #ping 192.168.13.200
 network=192.168.13
+cnetwork=192.168.14
 
 for id in `seq 0 127`; do
         ip netns del test-$id;
@@ -35,3 +36,6 @@ for id in `seq 0 127`; do
         bring $id $(( $id + 1 ))
 done;
 
+ip netns exec test-1 ip a a $cnetwork.2/30 dev test-1-0
+ip a a $cnetwork.1/30 dev test-0-1
+ip r a $network.0/24 via $cnetwork.2
