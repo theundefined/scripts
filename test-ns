@@ -1,0 +1,41 @@
+#!/bin/sh
+#to test:
+#ip netns exec test-1 bash
+#ping 192.168.13.200
+network=192.168.13
+cnetwork=192.168.14
+
+for id in `seq 0 127`; do
+        ip netns del test-$id;
+done;
+
+bring(){
+ set -x
+ idprev=$1
+ id=$2
+ ipprev=$(( $idprev * 2 ))
+ ip=$(( $idprev * 2 + 1 ))
+ ip netns add test-$id
+ ip netns exec test-$id ip link set dev lo up 
+ ip netns exec test-$id sysctl -w net.ipv4.conf.default.forwarding=1
+ ip netns exec test-$id sysctl -w net.ipv4.conf.default.hop_limit=255
+ ip link add test-$1-$2 type veth peer name test-$2-$1
+ [ $idprev -eq 0 ] && ip link set test-$1-$2 up
+ [ $idprev -eq 0 ] && ip a a ${network}.$ipprev/31 dev test-$1-$2
+ [ $idprev -eq 0 ] && ip r a ${network}.0/24 via ${network}.$ip
+
+ [ $idprev -gt 0 ] && ip link set test-$1-$2 netns test-$idprev up
+ [ $idprev -gt 0 ] && ip netns exec test-$idprev ip a a ${network}.$ipprev/31 dev test-$1-$2
+ [ $idprev -gt 0 ] && ip netns exec test-$idprev ip r a ${network}.0/24 via $network.$ip
+ ip link set test-$2-$1 netns test-$id up
+ ip netns exec test-$id ip a a ${network}.$ip/31 dev test-$2-$1
+ ip netns exec test-$id ip r a default via ${network}.$ipprev
+}
+
+for id in `seq 0 127`; do
+        bring $id $(( $id + 1 ))
+done;
+
+ip netns exec test-1 ip a a $cnetwork.2/30 dev test-1-0
+ip a a $cnetwork.1/30 dev test-0-1
+ip r a $network.0/24 via $cnetwork.2

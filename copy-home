@@ -1,0 +1,11 @@
+#!/bin/sh
+lvconvert --merge space/newhome_rimage_1
+until lvs |grep newhome |grep 100.00|xargs echo |grep 100.00$;do sleep 10; done;
+lvconvert -m 1 --type raid1 /dev/space/newhome
+lvconvert --splitmirrors 1 --trackchanges /dev/space/newhome /dev/mapper/cryptsshd
+
+lvconvert --merge space/root_rimage_1
+until lvs |grep root |grep 100.00|xargs echo |grep 100.00$;do sleep 10; done;
+lvconvert -m 1 --type raid1 /dev/space/root
+lvconvert --splitmirrors 1 --trackchanges /dev/space/root /dev/mapper/cryptsshd
+
