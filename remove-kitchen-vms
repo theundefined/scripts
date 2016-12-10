@@ -1,0 +1,9 @@
+#!/bin/sh
+vboxmanage list runningvms |grep kitchen |tr -d '"' |while read name uuid; do 
+	echo power off $name machine
+	vboxmanage controlvm $name poweroff
+done
+vboxmanage list vms |grep kitchen |tr -d '"' |while read name uuid; do 
+	echo remove $name image
+	vboxmanage unregistervm $name -delete; 
+done

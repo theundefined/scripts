@@ -17,14 +17,19 @@ if [ ! -d $dir ]; then
 fi
 
 lockfile=$dir/$name.lock
+pidfile=$dir/$name.pid
 
 exec 200>$lockfile
 if flock -n 200; then
         pid=$$
         echo $pid 1>&200
+	echo $pid > $pidfile
         mk-job $name $@
         rm $lockfile
 else
-        echo WARNING: $name already running
+        echo WARNING: $name already running:
+	oldpid=$(cat $pidfile)
+	pstree -apu $oldpid
+	ps u $oldpid
         exit 1
 fi

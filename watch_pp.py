@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import suds
 import suds.client
 import suds.wsse
 import sys
