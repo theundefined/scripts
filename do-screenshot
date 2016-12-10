@@ -1,0 +1,5 @@
+#!/bin/sh
+name=/tmp/screenshot-$(date +%Y%m%d-%H%M%S).png
+sleep 1
+scrot -s $name >/tmp/s.log 2>&1
+gimp $name
