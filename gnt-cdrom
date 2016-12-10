@@ -1,0 +1,19 @@
+#!/bin/sh
+name=$1
+isopath=$2
+
+monitorpath=/var/run/ganeti/kvm-hypervisor/ctrl/$1.monitor
+ls -l $monitorpath $isopath
+if [ ! -S $monitorpath ]; then
+	echo wywolaj:
+	echo $0 vmname isopath
+	exit 0
+fi
+echo "info block" | socat - unix:$monitorpath
+
+if [ ! -f $isopath ]; then
+	echo plik $isopath nie istnieje
+	exit 0
+fi
+
+echo change ide1-cd0 $isopath |  socat - unix:$monitorpath
