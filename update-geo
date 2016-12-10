@@ -1,6 +1,6 @@
 #!/bin/sh
 # ipv4
-wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz -O -|gzip -d > /usr/share/GeoIP/GeoIPASN.dat
+wget http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz -O -|gzip -d > /usr/share/GeoIP/GeoIPASNum.dat
 wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz -O -|gzip -d >  /usr/share/GeoIP/GeoIP.dat
 wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -O -|gzip -d >  /usr/share/GeoIP/GeoLiteCity.dat
 # ipv6
