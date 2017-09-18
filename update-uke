@@ -1,0 +1,6 @@
+#!/bin/sh
+rm T1-PSTN.xml.zip
+wget http://www.uke.gov.pl/tablice/xml/T1-PSTN.xml.zip
+unzip -o T1-PSTN.xml.zip
+hg ci -m "`date`" T1-PSTN.xml T1-PSTN.xml.zip
+rm /tmp/uke.cache

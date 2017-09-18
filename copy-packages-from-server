@@ -1,0 +1,10 @@
+#!/bin/sh
+if [ -z "$2" ]; then
+echo $0 from-server to-server
+exit 1
+fi
+ssh $2 sudo apt-get install dselect
+ssh $2 sudo dselect update
+ssh $1 dpkg --get-selections  | egrep -v "linux-image|linux-headers" |ssh $2 sudo dpkg --set-selections
+ssh $2 sudo apt-get -y update
+ssh $2 sudo apt-get dselect-upgrade
