@@ -8,3 +8,5 @@ host myip.opendns.com resolver1.opendns.com
 #	grep -A 2 bx_yip |
 #	grep -v class |
 #	cut -f 2 -d ">" |cut -f 1 -d "<" |xargs echo
+
+curl ifconfig.co

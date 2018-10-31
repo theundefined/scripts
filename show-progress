@@ -5,6 +5,10 @@ import time
 try:
         pid=int(sys.argv[1])
         fd=int(sys.argv[2])
+        if len(sys.argv)>2:
+            fsize=int(sys.argv[3])
+        else:
+            fsize=os.path.getsize(pathfd)
         pathfdinfo="/proc/%d/fdinfo/%d" % (pid,fd)
         pathfd="/proc/%d/fd/%d" % (pid,fd)
 except:
@@ -19,7 +23,6 @@ while(1):
 
         last=current
         current=int(fdinfo.readline().split("\t")[1])
-        fsize=os.path.getsize(pathfd)
         print current,fsize,100.0 * current/fsize,"ETA:", 10.0 * (fsize-current) / (current-last)
         time.sleep(10)
         fdinfo.close()
