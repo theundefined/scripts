@@ -1,31 +1,34 @@
 #!/bin/sh
+mine=LVDS2
 xrandr --auto
 xrandr --output DP1 --auto
 xrandr --output DP2 --auto
 xrandr --output DP3 --auto
 xrandr --output VGA1 --auto
+xrandr --output VGA2 --auto
 xrandr --output LVDS1 --auto
 xrandr --output HDMI1 --auto
 xrandr --output HDMI2 --auto
 xrandr --output HDMI3 --auto
-xrandr --auto --output VGA1 --left-of LVDS1
-xrandr --auto --output DP1 --right-of LVDS1
-xrandr --auto --output DP2 --right-of LVDS1
-xrandr --auto --output DP3 --left-of LVDS1
-xrandr --auto --output HDMI1 --right-of LVDS1
-xrandr --auto --output HDMI2 --right-of LVDS1
-xrandr --auto --output HDMI3 --right-of LVDS1
-
+xrandr --output LVDS2 --auto
+xrandr --auto --output VGA1 --left-of $mine
+xrandr --auto --output VGA2 --left-of $mine
+xrandr --auto --output DP1 --right-of $mine
+xrandr --auto --output DP2 --right-of $mine
+xrandr --auto --output DP3 --left-of $mine
+xrandr --auto --output HDMI1 --right-of $mine
+xrandr --auto --output HDMI2 --right-of $mine
+xrandr --auto --output HDMI3 --right-of $mine
 if [ "$1" = "same" ]; then
 	max=`xrandr  |awk '{print $1 }' |sort |uniq -c |grep "  2" |awk '{print $2}' |sort -n |tail -1`
 	maxxx=1440x900
 	xrandr  --output DP1 --mode $max
 	xrandr  --output HDMI1 --mode $max
-	xrandr  --output LVDS1 --mode $max
-	xrandr  --output VGA1 --mode $max
-	xrandr --auto --output DP1 --same-as LVDS1
-	xrandr --auto --output HDMI1 --same-as LVDS1
-	xrandr --auto --output VGA1 --same-as LVDS1
+	xrandr  --output $mine --mode $max
+	xrandr  --output VGA2 --mode $max
+	xrandr --auto --output DP1 --same-as $mine
+	xrandr --auto --output HDMI1 --same-as $mine
+	xrandr --auto --output VGA2 --same-as $mine
 elif [ "$1" = "off" ]; then
 	xrandr --output DP1 --off
 	xrandr --output VGA1 --off

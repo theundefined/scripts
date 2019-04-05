@@ -7,12 +7,12 @@ case $2 in
 	on)
 		lvcreate -n ${name}_cache -L 8G $VG $SSDPV
 		lvcreate -n ${name}_cache_meta -L 16M $VG $SSDPV
-		lvconvert --type cache-pool --poolmetadata $VG/${name}_cache_meta $VG/${name}_cache
-		lvconvert --type cache --cachemode writeback --cachepool $VG/${name}_cache $VG/${name}
+		lvconvert -y --type cache-pool --poolmetadata $VG/${name}_cache_meta $VG/${name}_cache
+		lvconvert -y --type cache --cachemode writeback --cachepool $VG/${name}_cache $VG/${name}
 		;;
 	off)
 		lvconvert --splitcache $VG/${name}
-		lvremove space/${name}_cache
+		lvremove -y space/${name}_cache
 		;;
 	*)
 		echo Current cached volumes:
