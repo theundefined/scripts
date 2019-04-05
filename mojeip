@@ -10,3 +10,5 @@ host myip.opendns.com resolver1.opendns.com
 #	cut -f 2 -d ">" |cut -f 1 -d "<" |xargs echo
 
 curl ifconfig.co
+
+curl https://api.ipify.org
