@@ -1,0 +1,2 @@
+#!/bin/sh
+wget -q https://a.orlen.pl/PL/DlaBiznesu/HurtoweCenyPaliw/Strony/default.aspx -O - |grep -Eo "Pb95Price.>[0-9 ]+,[0-9]+</span" |cut -f 2 -d '>'|cut -f 1 -d '<' |tr -d ',' |xargs echo

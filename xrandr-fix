@@ -11,6 +11,7 @@ xrandr --output HDMI1 --auto
 xrandr --output HDMI2 --auto
 xrandr --output HDMI3 --auto
 xrandr --output LVDS2 --auto
+xrandr --output DP-1-2 --auto
 xrandr --auto --output VGA1 --left-of $mine
 xrandr --auto --output VGA2 --left-of $mine
 xrandr --auto --output DP1 --right-of $mine
@@ -19,6 +20,7 @@ xrandr --auto --output DP3 --left-of $mine
 xrandr --auto --output HDMI1 --right-of $mine
 xrandr --auto --output HDMI2 --right-of $mine
 xrandr --auto --output HDMI3 --right-of $mine
+xrandr --auto --output DP-1-2 --right-of $mine
 if [ "$1" = "same" ]; then
 	max=`xrandr  |awk '{print $1 }' |sort |uniq -c |grep "  2" |awk '{print $2}' |sort -n |tail -1`
 	maxxx=1440x900
