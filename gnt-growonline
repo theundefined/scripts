@@ -1,0 +1,37 @@
+#!/bin/sh
+set -e
+name=$1
+if [ -z "$name" ]; then
+	echo $0 vmname
+	exit 1
+fi
+
+monitorpath=/var/run/ganeti/kvm-hypervisor/ctrl/${name}.monitor
+if [ ! -S $monitorpath ]; then
+	echo $monitorpath dont exists
+	exit 1
+fi
+
+tmpfile=`mktemp /tmp/vm-${name}.XXXXXX`
+echo info block |socat - unix:$monitorpath |grep -E '^(disk|hotdisk)' > $tmpfile
+echo disks:
+cat $tmpfile
+kvmnames=$(cut -f 1 -d ' ' <$tmpfile)
+for kvmname in $kvmnames; do
+	blockname=$(grep $kvmname $tmpfile | grep -Eo '/var/run/ganeti/instance-disks/[a-z0-9:-]+')
+
+	if [ ! -h "$blockname" ]; then
+		echo there is no file $blockname
+		exit 1
+	fi
+
+	size=$(blockdev --getsize64 "$blockname")
+
+	if [ ! $size -gt 0 ]; then
+		echo incorrect size
+		exit 1
+	fi
+
+	echo size of $blockname: $size
+	echo block_resize $kvmname ${size}B |socat - unix:$monitorpath |xargs echo
+done
