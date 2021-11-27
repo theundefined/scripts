@@ -1,5 +1,5 @@
 #!/bin/sh
-mine=LVDS2
+mine=LVDS1
 xrandr --auto
 xrandr --output DP1 --auto
 xrandr --output DP2 --auto

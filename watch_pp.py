@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import suds
 import suds.client
 import suds.wsse
@@ -13,10 +13,10 @@ password="PPSA"
 def show_data(client,numer):
     spr=client.service.sprawdzPrzesylke(numer)
     if not spr.danePrzesylki:
-        print "Brak przesylki %s" % (numer,)
+        print("Brak przesylki %s" % (numer,))
         return
     for i in spr.danePrzesylki.zdarzenia[0]:
-        print numer,i.czas, i.jednostka.nazwa, i.kod, i.nazwa
+        print(numer,i.czas, i.jednostka.nazwa, i.kod, i.nazwa)
 
 if len(sys.argv) > 1:
     numery=list(sys.argv[1:])

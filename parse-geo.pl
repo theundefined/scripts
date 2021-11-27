@@ -16,11 +16,12 @@ chomp($ip);
 if ($ip =~ /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/) {
 $country = $gcountry->country_code_by_addr($ip);
 $asn = $gasn->org_by_addr($ip);
-$recordcity = $gcity->record_by_addr($ip);
+# $recordcity = $gcity->record_by_addr($ip);
 
 #$country=$recordcity->country_code;
 #$city=$recordcity->city;
 
 printf "$ip;$asn\n";
+#printf "$ip;$country\n";
 }
 }
