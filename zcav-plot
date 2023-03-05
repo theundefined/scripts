@@ -1,0 +1,21 @@
+#!/bin/sh
+set -ex
+#zcav /dev/nvmen1
+#DRIVE=nvmen1
+FILE=$1
+[ -f "$FILE" ]  || exit 1
+
+gnuplot <<EOF
+unset autoscale x
+set autoscale xmax
+unset autoscale y
+set decimalsign '.'
+set autoscale ymax
+set xlabel "Position (GB)"
+set ylabel "MB/s"
+set key right bottom
+set title "$FILE"
+set terminal png
+set output "${FILE}.png"
+plot "$FILE"
+EOF
