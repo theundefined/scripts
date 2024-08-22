@@ -14,8 +14,8 @@ while (<>) {
 $ip=$_; 
 chomp($ip);
 if ($ip =~ /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/) {
-$country = $gcountry->country_code_by_addr($ip);
-#$asn = $gasn->name_by_addr($ip);
+	#$country = $gcountry->country_code_by_addr($ip);
+	$asn = $gasn -> name_by_addr($ip);
 # $recordcity = $gcity->record_by_addr($ip);
 
 #$country=$recordcity->country_code;

@@ -1,8 +1,15 @@
 #!/bin/sh
 mine=LVDS1
 mine=eDP
-left=`xrandr |grep -E 'DisplayPort.* connected'|cut -f 1 -d ' ' |head -1`
-right=`xrandr |grep -E 'DisplayPort.* connected'|cut -f 1 -d ' ' |tail -1`
+monitorsinoffice=`xrandr |grep -E '1920x1200.*59.95' |wc -l`
+if [ "$1" = "office" -o \( $monitorsinoffice -eq 2 \) ]; then
+	left=`xrandr |grep -E 'DisplayPort.* connected|HDMI-A-0.* connected'|cut -f 1 -d ' ' |tail -1`
+	right=`xrandr |grep -E 'DisplayPort.* connected|HDMI-A-0.* connected'|cut -f 1 -d ' ' |head -1`
+else
+	left=`xrandr |grep -E 'DisplayPort.* connected|HDMI-A-0.* connected'|cut -f 1 -d ' ' |head -1`
+	right=`xrandr |grep -E 'DisplayPort.* connected|HDMI-A-0.* connected'|cut -f 1 -d ' ' |tail -1`
+fi
+echo left: $left right: $right
 xrandr --auto
 xrandr --output eDP --auto
 xrandr --output DP1 --auto
@@ -32,13 +39,10 @@ xrandr --auto --output $right --right-of $mine
 if [ "$1" = "same" ]; then
 	max=`xrandr  |awk '{print $1 }' |sort |uniq -c |grep "  2" |awk '{print $2}' |sort -n |tail -1`
 	maxxx=1440x900
-	xrandr  --output DP1 --mode $max
-	xrandr  --output HDMI1 --mode $max
-	xrandr  --output $mine --mode $max
-	xrandr  --output VGA2 --mode $max
-	xrandr --auto --output DP1 --same-as $mine
-	xrandr --auto --output HDMI1 --same-as $mine
-	xrandr --auto --output VGA2 --same-as $mine
+	for m in `xrandr |grep -v $mine |grep ' connected' |awk '{print $1}'`; do
+		xrandr  --output $m --mode $max
+		xrandr --auto --output $m --same-as $mine
+	done
 elif [ "$1" = "off" ]; then
 	xrandr --output DP1 --off
 	xrandr --output VGA1 --off

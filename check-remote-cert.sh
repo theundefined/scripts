@@ -9,7 +9,7 @@ if [ "$2" ]; then
 	shift
 	params=$*
 else
-	params="-noout -subject -issuer -dates -modulus"
+	params="-noout -subject -issuer -dates -modulus -pubkey"
 fi
 SERVERNAME=$(echo $SERVER|cut -f 1 -d ':')
 
