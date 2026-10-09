@@ -2,9 +2,9 @@
 use Geo::IP;
 
 #my $gi = Geo::IP->new(GEOIP_STANDARD);
-# http://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz
-# http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
-# http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+# https://download.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz
+# https://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz
+# https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
 #my $gcity = Geo::IP->open('/usr/share/GeoIP/GeoLiteCity.dat' , GEOIP_STANDARD );
 #my $gcountry = Geo::IP->open('/usr/share/GeoIP/GeoIP.dat' , GEOIP_STANDARD );
 my $gasn = Geo::IP->open('/usr/share/GeoIP/GeoIPASNum.dat' , GEOIP_STANDARD );
